@@ -32,22 +32,22 @@
 <a id="步骤" class="anchor" href="#%E6%AD%A5%E9%AA%A4" aria-hidden="true"><span class="octicon octicon-link"></span></a>步骤</h3>
 
 <ol>
-<li><p>安装subversion/git服务器，并给团队成员分配权限
+<li><p>安装subversion/git服务器，并给团队成员分配权限<br>
 这一步网上有很多介绍，此处省略</p></li>
-<li><p>安装phpBB论坛，3.0.12版本经过检验，然后按项目或者成员分配版面
+<li><p>安装phpBB论坛，3.0.12版本经过检验，然后按项目或者成员分配版面<br>
 这一步网上有很多介绍，此处省略</p></li>
-<li><p>配置phpBB论坛，分为三小步，第一小步：
+<li><p>配置phpBB论坛，分为三小步，第一小步：<br>
 给论坛增加orm类型的扩展名，类别是文档。它是极客讨论器的讨论消息文件，并确保文档扩展名组在帖子中允许。<br>
 <img src="https://github.com/fcshare/fcshare.github.io/blob/master/snapshots/v1.1/cn/extension.png?raw=true" alt="phpBB论坛扩展名设置">
 <img src="https://github.com/fcshare/fcshare.github.io/blob/master/snapshots/v1.1/cn/extension_group.png?raw=true" alt="phpBB论坛扩展名组设置"></p></li>
-<li><p>配置phpBB论坛，第二小步：
+<li><p>配置phpBB论坛，第二小步：<br>
 修改phpBB的download/file.php文件，找到 <code>if ($attachment['is_orphan'])</code>，在前面增加：<code>$attachment['is_orphan'] = 0;</code>
 这是因为phpBB的帖子不允许带孤儿附件，通常附件是属于某个帖子的，而孤儿附件不属于任何帖子。而极客讨论器的消息文件不是通过某个帖子的附件而是直接上传的，对于phpBB是孤儿附件。修改此处代码可以解决这个问题。</p></li>
-<li><p>配置phpBB论坛，第三小步：
+<li><p>配置phpBB论坛，第三小步：<br>
 修改phpBB的includes/functions_upload.php文件，找到<code>if (!$this-&gt;valid_extension($file))</code>，修改为：<code>if (false)</code>
 不带代码位置的消息文件验证会失败，不要验证附件是否有效。</p></li>
 <li>
-<p>论坛配置完成后，就可以将此论坛添加到极客讨论器的极客网站列表中了。找到极客讨论器的geeksites目录，为你的论坛创建一个lua文件。
+<p>论坛配置完成后，就可以将此论坛添加到极客讨论器的极客网站列表中了。找到极客讨论器的geeksites目录，为你的论坛创建一个lua文件。<br>
 例如你的论坛域名是：www.mycompany.com，在geeksites目录下创建www.mycompany.com.lua文件，内容是：  </p>
 
 <blockquote>
