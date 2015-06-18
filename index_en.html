@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>An introduction of how to build a source code discussion environment in a development department. by fcshare</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">An introduction of how to build a source code discussion environment in a development department</h1>
+    </section>
+
+    <section class="main-content">
+      <p>Method to directly discuss the source code: You need to use subversion or git server to version-control your source code.<br>
+You must also install an internal BBS on your server. Each member can use GTalkabout in BBS posts and the associated source code to automatically record the process and operations as a result of the source code.<br>
+Other members can see posts with GTalkabout source code, and can reply in discussions.<br>
+If the source code related to a post has been modified or deleted, GTalkabout will display both the original code and the current code.<br>
+If the source code's location has changed, GTalkabout will recalculate the position and point to the new position.</p>
+
+<h3>
+<a id="Requiredtools" class="anchor" href="#Requiredtools" aria-hidden="true"><span class="octicon octicon-link"></span></a>Required tools:</h3>
+
+<ul>
+<li>phpBB 3.0.12</li>
+<li>subversion/git server </li>
+<li>GTalkabout Personal Edition or Advanced Edition</li>
+</ul>
+
+<h3>
+<a id="Step" class="anchor" href="#Step" aria-hidden="true"><span class="octicon octicon-link"></span></a>Step:</h3>
+
+<ol>
+<li><p>Install subversion/git server and assign permissions to team members.</p></li>
+<li><p>Install phpBB, Version 3.0.12, create forums according to the project or member.</p></li>
+<li><p>The configuration of phpBB is divided into three steps;<br>
+Step 1: Add an "orm" extension and specify its group to related documents.<br>
+This is GTalkabout's message file, and ensures the document extension group is permitted in posts.<br>
+<img src="https://github.com/fcshare/fcshare.github.io/blob/master/snapshots/v1.1/en/extension.png?raw=true" alt="extension"><br>
+<img src="https://github.com/fcshare/fcshare.github.io/blob/master/snapshots/v1.1/cn/extension_group.png?raw=true" alt="extension group"></p></li>
+<li><p>Step 2: Modify the "download/file.php" file of phpBB, find the code <code>if ($attachment['is_orphan'])</code>, increase in front: <code>$attachment['is_orphan'] = 0;</code>
+This is because the phpBB posts are not allowed to take an orphan attachment.<br>
+Usually, an attachment belongs to a post, whereas orphan attachments do not belong to any posts.<br>
+GTalkabout message files are directly uploaded but without an attached a post; therefore, they are orphan attachments to phpBB. Modify the code to solve this problem.</p></li>
+<li><p>Step 3: Modify the "includes/functions_upload.php" file of phpBB, find the code <code>if (!$this-&gt;valid_extension($file))</code> is amended as: <code>if (false)</code>
+as the message file validation will fail without code position. No need to authorize, attachments are already valid.</p></li>
+<li>
+<p>After the phpBB configuration is completed, it can be added to the list of GTalkabout's geeksites.<br>
+Find the "geeksites" directory under the installation directory of GTalkabout, create a lua file for your BBS.<br>
+For example, if your BBS domain is: www.mycompany.com, create a "www.mycompany.com.lua" file, and fill the following content:  </p>
+
+<blockquote>
+<pre><code>Application = "GTalkabout"
+Version = "1.1"
+ScriptType = "client"
+Disabled = false
+talk = "phpbb/talk.py"
+skin = "phpbb_skin/skin.lua"
+server = "www.mycompany.com"
+protocol = "http"
+port = 80  
+</code></pre>
+</blockquote>
+</li>
+</ol>
+
+<p>Save and restart GTalkabout. You can now select your geek site, named www.mycompany.com<br>
+<img src="https://github.com/fcshare/fcshare.github.io/blob/master/snapshots/v1.1/en/geeksites.png?raw=true" alt="geeksites"></p>
+
+<ol>
+<li><p>Now let's see an example of source code discussion:<br>
+From the previous step, click on "3rd Party Open Source" to enter the configuration interface.<br>
+Select the Server URL for www.mycompany.com in the server configuration category, assuming your BBS has created a forum 3(You can check it from the forum's URL, f=3 means the forum's ID is 3), press f=3 in the Resource ID.<br>
+<img src="https://github.com/fcshare/fcshare.github.io/blob/master/snapshots/v1.1/en/server.png?raw=true" alt="server"><br>
+You can choose the type of repository; there are two types of repository you can choose from: subversion and git.<br>
+Suppose your server 192.168.0.1 has a "testproject" subversion repository; input in the Repository URL <a href="http://192.168.0.1/testproject">http://192.168.0.1/testproject</a>.<br>
+If you have committing permissions, you can uncheck the read-only. Other configurations will be set as default.<br>
+Press "OK" to enter the discussion interface.<br>
+<img src="https://github.com/fcshare/fcshare.github.io/blob/master/snapshots/v1.1/en/subversion.png?raw=true" alt="subversion"></p></li>
+<li><p>Edit a message, and select its associated code:<br>
+The send button name is NewTopic because it is a new post. If you are reading posts, the send button name will changed to PostReply.<br>
+Press the NewTopic button to post a new topic.<br>
+<img src="https://github.com/fcshare/fcshare.github.io/blob/master/snapshots/v1.1/en/composing.png?raw=true" alt="compsing"></p></li>
+<li><p>This message was posted to your BBS.<br>
+After many replies generated, it will look like the following picture. Each post has a "locate" link, and can be used to locate code.<br>
+The code can also locate posts. Some posts have a "patch" link and can provide a patch to the located code.<br>
+<img src="https://github.com/fcshare/fcshare.github.io/blob/master/snapshots/v1.1/en/reading.png?raw=true" alt="reading"></p></li>
+<li><p>The locator is positioning to the code in the repository, not in your working path.<br>
+This means that when the code has been modified, click the locator, and it will open the original code and the modified code to compare their difference.<br>
+<img src="https://github.com/fcshare/fcshare.github.io/blob/master/snapshots/v1.1/en/comparing.png?raw=true" alt="comparing"></p></li>
+</ol>
+
+<h3>
+<a id="Announcements" class="anchor" href="#Announcements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Announcements:</h3>
+
+<ul>
+<li>It is advised that each post and related replies discuss one process or data flow. This enables each post to be functional for clear reading, discussion and implementation processes for the relevant code. </li>
+<li>In the same way you can also annotate the source code hosted on your computer. GTalkabout can create local SVN repository, without a SVN/git server required; however, you need to setup a BBS in your computer as in the above steps. </li>
+<li>Alternatively, you can choose to create the BBS on the internet. Indeed, geeksites server's URL does not support the IP address form, so you will need to use a domain name. Please amend the "hosts" file if it is a LAN host to set up a LAN domain name.</li>
+</ul>
+
+      <footer class="site-footer">
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("
+3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-47797025-3");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
+
