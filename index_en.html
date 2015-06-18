@@ -40,7 +40,7 @@ If the source code's location has changed, GTalkabout will recalculate the posit
 Step 1: Add an "orm" extension and specify its group to related documents.<br>
 This is GTalkabout's message file, and ensures the document extension group is permitted in posts.<br>
 <img src="https://github.com/fcshare/fcshare.github.io/blob/master/snapshots/v1.1/en/extension.png?raw=true" alt="extension"><br>
-<img src="https://github.com/fcshare/fcshare.github.io/blob/master/snapshots/v1.1/cn/extension_group.png?raw=true" alt="extension group"></p></li>
+<img src="https://github.com/fcshare/fcshare.github.io/blob/master/snapshots/v1.1/en/extension_group.png?raw=true" alt="extension group"></p></li>
 <li><p>Step 2: Modify the "download/file.php" file of phpBB, find the code <code>if ($attachment['is_orphan'])</code>, increase in front: <code>$attachment['is_orphan'] = 0;</code>
 This is because the phpBB posts are not allowed to take an orphan attachment.<br>
 Usually, an attachment belongs to a post, whereas orphan attachments do not belong to any posts.<br>
