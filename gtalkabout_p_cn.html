@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>极客讨论器 个人版</title>
+<style>
+body, html {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  -webkit-transition: opacity 400ms;
+  -moz-transition: opacity 400ms;
+  transition: opacity 400ms;
+  font-family: 'open sans';
+  text-align: center;
+  position: relative;
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+body, .onepage-wrapper, html {
+  display: block;
+  position: static;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.onepage-wrapper {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: relative;
+  padding: 0;
+  -webkit-transform-style: preserve-3d;
+}
+
+.onepage-wrapper .section {
+  width: 100%;
+  height: 100%;
+}
+
+.onepage-pagination {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  z-index: 5;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.onepage-pagination li {
+  padding: 0;
+  text-align: center;
+}
+.onepage-pagination li a{
+  padding: 10px;
+  width: 4px;
+  height: 4px;
+  display: block;
+  
+}
+.onepage-pagination li a:before{
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(0,0,0,0.85);
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+}
+
+.onepage-pagination li a.active:before{
+  width: 10px;
+  height: 10px;
+  background: none;
+  border: 1px solid black;
+  margin-top: -4px;
+  left: 8px;
+}
+
+.disabled-onepage-scroll, .disabled-onepage-scroll .wrapper {
+  overflow: auto;
+}
+
+.disabled-onepage-scroll .onepage-wrapper .section {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+}
+.disabled-onepage-scroll .onepage-wrapper {
+  -webkit-transform: none !important;
+  -moz-transform: none !important;
+  transform: none !important;
+  -ms-transform: none !important;
+  min-height: 100%;
+}
+
+.disabled-onepage-scroll .onepage-pagination {
+  display: none;
+}
+
+body.disabled-onepage-scroll, .disabled-onepage-scroll .onepage-wrapper, html {
+  position: inherit;
+}
+.page1 { background-color: #E6D9C8;}
+.page2 { background-color: #E6D9C8;}
+.page3 { background-color: #E6D9C8;}
+.page4 { background-color: #E6D9C8;}
+p.title { position: relative; top: 35%; font: 700 40px "Microsoft Yahei"; color: #fff; text-align: center;}
+</style>
+<script type="text/javascript" src="javascripts/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="javascripts/jquery.onepage-scroll.js"></script>
+<script type="text/javascript" src="javascripts/functionmap_cn_anim.js"></script>
+<script type="text/javascript" src="javascripts/trackmodification_cn_anim.js"></script>
+<script type="text/javascript" src="javascripts/travellingmode_cn_anim.js"></script>
+<script type="text/javascript" src="javascripts/repositorybar_cn_anim.js"></script>
+<script type="text/javascript">
+var delay_scale = 0.7
+var timer = null
+
+var animate = function(img, timeline, element)
+{
+	var i = 0
+
+	var run_time = 0
+	for (var j = 0; j < timeline.length - 1; ++j)
+		run_time += timeline[j].delay
+
+	var f = function()
+	{
+		var frame = i++ % timeline.length
+		var delay = timeline[frame].delay * delay_scale
+		var blits = timeline[frame].blit
+
+		var ctx = element.getContext('2d')
+
+		for (j = 0; j < blits.length; ++j)
+		{
+			var blit = blits[j]
+			var sx = blit[0]
+			var sy = blit[1]
+			var w = blit[2]
+			var h = blit[3]
+			var dx = blit[4]
+			var dy = blit[5]
+			ctx.drawImage(img, sx, sy, w, h, dx, dy, w, h)
+		}
+
+		timer = window.setTimeout(f, delay)
+	}
+
+	if (timer) window.clearTimeout(timer)
+	f()
+}
+
+var animate_fallback = function(img, timeline, element)
+{
+	var i = 0
+
+	var run_time = 0
+	for (var j = 0; j < timeline.length - 1; ++j)
+		run_time += timeline[j].delay
+
+	var f = function()
+	{
+		if (i % timeline.length == 0)
+		{
+			while (element.hasChildNodes())
+				element.removeChild(element.lastChild)
+		}
+
+		var frame = i++ % timeline.length
+		var delay = timeline[frame].delay * delay_scale
+		var blits = timeline[frame].blit
+
+		for (j = 0; j < blits.length; ++j)
+		{
+			var blit = blits[j]
+			var sx = blit[0]
+			var sy = blit[1]
+			var w = blit[2]
+			var h = blit[3]
+			var dx = blit[4]
+			var dy = blit[5]
+
+			var d = document.createElement('div')
+			d.style.position = 'absolute'
+			d.style.left = dx + "px"
+			d.style.top = dy + "px"
+			d.style.width = w + "px"
+			d.style.height = h + "px"
+			d.style.backgroundImage = "url('" + img.src + "')"
+			d.style.backgroundPosition = "-" + sx + "px -" + sy + "px"
+
+			element.appendChild(d)
+		}
+
+		timer = window.setTimeout(f, delay)
+	}
+
+	if (timer) window.clearTimeout(timer)
+	f()
+}
+
+function set_animation(img_url, timeline, canvas_id, fallback_id)
+{
+	var img = new Image()
+	img.onload = function()
+	{
+		var canvas = document.getElementById(canvas_id)
+		if (canvas && canvas.getContext)
+			animate(img, timeline, canvas)
+		else
+			animate_fallback(img, timeline, document.getElementById(fallback_id))
+	}
+	img.src = img_url
+}
+</script>
+<script>
+$(function(){
+	$('.main').onepage_scroll({
+		sectionContainer: '.page',
+		afterMove: function(index){
+			switch(index){
+				case 1:
+					set_animation("snapshots/v1.1/cn/functionmap_cn_packed.png", functionmap_cn_timeline, 'anim_target1', 'anim_fallback1');
+					break;
+				case 2:
+					set_animation("snapshots/v1.1/cn/trackmodification_cn_packed.png", trackmodification_cn_timeline, 'anim_target2', 'anim_fallback2');
+					break;
+				case 3:
+					set_animation("snapshots/v1.1/cn/travellingmode_cn_packed.png", travellingmode_cn_timeline, 'anim_target3', 'anim_fallback3');
+					break;
+				case 4:
+					set_animation("snapshots/v1.1/cn/repositorybar_cn_packed.png", repositorybar_cn_timeline, 'anim_target4', 'anim_fallback4');
+					break;
+			}
+		}
+	});
+});
+</script>
+</head>
+
+<body>
+<div class="main">
+	<div class="page page1">
+		<p><b>自动分析C/C++/Java/C#/Python/Objective-C语言源代码并生成表示调用关系的函数地图</b></p>
+		<p><a href="http://download.gtalkabout.com/gtalkabout_p_cn.exe">立即下载</a>（个人版免费下载，免费使用，免费升级）</p>
+		<div><canvas id="anim_target1" class="anim_target" width="850" height="500">
+		<div id="anim_fallback1" class="anim_target" style="width: 850px; height: 500px;"></div>
+		</canvas></div>
+		<script>
+		set_animation("snapshots/v1.1/cn/functionmap_cn_packed.png", functionmap_cn_timeline, 'anim_target1', 'anim_fallback1');
+		</script>
+    <p><small>&copy; 2011-2015 长沙市枫传网络科技有限公司，版权所有</small></p>
+	</div>
+	<div class="page page2">
+		<p><b>跟踪函数节点的修改状态并在函数地图上更新</b></p>
+		<p><a href="http://download.gtalkabout.com/gtalkabout_p_cn.exe">立即下载</a>（个人版免费下载，免费使用，免费升级）</p>
+		<div><canvas id="anim_target2" class="anim_target" width="850" height="500">
+		<div id="anim_fallback2" class="anim_target" style="width: 850px; height: 500px;"></div>
+		</canvas></div>
+    <p><small>&copy; 2011-2015 长沙市枫传网络科技有限公司，版权所有</small></p>
+	</div>
+	<div class="page page3">
+		<p><b>函数地图下的旅游模式：按照函数的调用顺序阅读源代码</b></p>
+		<p><a href="http://download.gtalkabout.com/gtalkabout_p_cn.exe">立即下载</a>（个人版免费下载，免费使用，免费升级）</p>
+		<div><canvas id="anim_target3" class="anim_target" width="850" height="500">
+		<div id="anim_fallback3" class="anim_target" style="width: 850px; height: 500px;"></div>
+		</canvas></div>
+    <p><small>&copy; 2011-2015 长沙市枫传网络科技有限公司，版权所有</small></p>
+	</div>
+	<div class="page page4">
+		<p><b>版本库导航栏：一个箭头完成subversion/git版本库内检索版本，检索文件，比对版本，比对文件，查找文件修改版本等操作</b></p>
+		<p><a href="http://download.gtalkabout.com/gtalkabout_p_cn.exe">立即下载</a>（个人版免费下载，免费使用，免费升级）</p>
+		<div><canvas id="anim_target4" class="anim_target" width="850" height="500">
+		<div id="anim_fallback4" class="anim_target" style="width: 850px; height: 500px;"></div>
+		</canvas></div>
+    <p><small>&copy; 2011-2015 长沙市枫传网络科技有限公司，版权所有</small></p>
+	</div>
+</div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		          <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-47797025-3");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+</body>
+</html>
