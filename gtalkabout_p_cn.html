@@ -108,10 +108,12 @@ body.disabled-onepage-scroll, .disabled-onepage-scroll .onepage-wrapper, html {
 .page2 { background-color: #E6D9C8;}
 .page3 { background-color: #E6D9C8;}
 .page4 { background-color: #E6D9C8;}
+.page5 { background-color: #E6D9C8;}
 p.title { position: relative; top: 35%; font: 700 40px "Microsoft Yahei"; color: #fff; text-align: center;}
 </style>
 <script type="text/javascript" src="javascripts/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="javascripts/jquery.onepage-scroll.js"></script>
+<script type="text/javascript" src="javascripts/messageroadsign_cn_anim.js"></script>
 <script type="text/javascript" src="javascripts/functionmap_cn_anim.js"></script>
 <script type="text/javascript" src="javascripts/trackmodification_cn_anim.js"></script>
 <script type="text/javascript" src="javascripts/travellingmode_cn_anim.js"></script>
@@ -225,16 +227,19 @@ $(function(){
 		afterMove: function(index){
 			switch(index){
 				case 1:
-					set_animation("snapshots/v1.1/cn/functionmap_cn_packed.png", functionmap_cn_timeline, 'anim_target1', 'anim_fallback1');
+					set_animation("snapshots/v1.1/cn/messageroadsign_cn_packed.png", messageroadsign_cn_timeline, 'anim_target1', 'anim_fallback1');
 					break;
 				case 2:
-					set_animation("snapshots/v1.1/cn/trackmodification_cn_packed.png", trackmodification_cn_timeline, 'anim_target2', 'anim_fallback2');
+					set_animation("snapshots/v1.1/cn/functionmap_cn_packed.png", functionmap_cn_timeline, 'anim_target2', 'anim_fallback2');
 					break;
 				case 3:
-					set_animation("snapshots/v1.1/cn/travellingmode_cn_packed.png", travellingmode_cn_timeline, 'anim_target3', 'anim_fallback3');
+					set_animation("snapshots/v1.1/cn/trackmodification_cn_packed.png", trackmodification_cn_timeline, 'anim_target3', 'anim_fallback3');
 					break;
 				case 4:
-					set_animation("snapshots/v1.1/cn/repositorybar_cn_packed.png", repositorybar_cn_timeline, 'anim_target4', 'anim_fallback4');
+					set_animation("snapshots/v1.1/cn/travellingmode_cn_packed.png", travellingmode_cn_timeline, 'anim_target4', 'anim_fallback4');
+					break;
+				case 5:
+					set_animation("snapshots/v1.1/cn/repositorybar_cn_packed.png", repositorybar_cn_timeline, 'anim_target5', 'anim_fallback5');
 					break;
 			}
 		}
@@ -246,18 +251,18 @@ $(function(){
 <body>
 <div class="main">
 	<div class="page page1">
-		<p><b>自动分析C/C++/Java/C#/Python/Objective-C语言源代码并生成表示调用关系的函数地图</b></p>
+		<p><b>在函数地图中使用消息路标，查找函数调用链</b></p>
 		<p><a href="http://download.gtalkabout.com/gtalkabout_p_cn.exe">立即下载</a>（个人版免费下载，免费使用，免费升级）</p>
 		<div><canvas id="anim_target1" class="anim_target" width="850" height="500">
 		<div id="anim_fallback1" class="anim_target" style="width: 850px; height: 500px;"></div>
 		</canvas></div>
 		<script>
-		set_animation("snapshots/v1.1/cn/functionmap_cn_packed.png", functionmap_cn_timeline, 'anim_target1', 'anim_fallback1');
+		set_animation("snapshots/v1.1/cn/messageroadsign_cn_packed.png", messageroadsign_cn_timeline, 'anim_target1', 'anim_fallback1');
 		</script>
     <p><small>&copy; 2011-2015 长沙市枫传网络科技有限公司，版权所有</small></p>
 	</div>
 	<div class="page page2">
-		<p><b>跟踪函数节点的修改状态并在函数地图上更新</b></p>
+		<p><b>自动分析C/C++/Java/C#/Python/Objective-C语言源代码并生成表示调用关系的函数地图</b></p>
 		<p><a href="http://download.gtalkabout.com/gtalkabout_p_cn.exe">立即下载</a>（个人版免费下载，免费使用，免费升级）</p>
 		<div><canvas id="anim_target2" class="anim_target" width="850" height="500">
 		<div id="anim_fallback2" class="anim_target" style="width: 850px; height: 500px;"></div>
@@ -265,7 +270,7 @@ $(function(){
     <p><small>&copy; 2011-2015 长沙市枫传网络科技有限公司，版权所有</small></p>
 	</div>
 	<div class="page page3">
-		<p><b>函数地图下的旅游模式：按照函数的调用顺序阅读源代码</b></p>
+		<p><b>跟踪函数节点的修改状态并在函数地图上更新</b></p>
 		<p><a href="http://download.gtalkabout.com/gtalkabout_p_cn.exe">立即下载</a>（个人版免费下载，免费使用，免费升级）</p>
 		<div><canvas id="anim_target3" class="anim_target" width="850" height="500">
 		<div id="anim_fallback3" class="anim_target" style="width: 850px; height: 500px;"></div>
@@ -273,10 +278,18 @@ $(function(){
     <p><small>&copy; 2011-2015 长沙市枫传网络科技有限公司，版权所有</small></p>
 	</div>
 	<div class="page page4">
-		<p><b>版本库导航栏：一个箭头完成subversion/git版本库内检索版本，检索文件，比对版本，比对文件，查找文件修改版本等操作</b></p>
+		<p><b>函数地图下的旅游模式：按照函数的调用顺序阅读源代码</b></p>
 		<p><a href="http://download.gtalkabout.com/gtalkabout_p_cn.exe">立即下载</a>（个人版免费下载，免费使用，免费升级）</p>
 		<div><canvas id="anim_target4" class="anim_target" width="850" height="500">
 		<div id="anim_fallback4" class="anim_target" style="width: 850px; height: 500px;"></div>
+		</canvas></div>
+    <p><small>&copy; 2011-2015 长沙市枫传网络科技有限公司，版权所有</small></p>
+	</div>
+	<div class="page page5">
+		<p><b>版本库导航栏：一个箭头完成subversion/git版本库内检索版本，检索文件，比对版本，比对文件，查找文件修改版本等操作</b></p>
+		<p><a href="http://download.gtalkabout.com/gtalkabout_p_cn.exe">立即下载</a>（个人版免费下载，免费使用，免费升级）</p>
+		<div><canvas id="anim_target5" class="anim_target" width="850" height="500">
+		<div id="anim_fallback5" class="anim_target" style="width: 850px; height: 500px;"></div>
 		</canvas></div>
     <p><small>&copy; 2011-2015 长沙市枫传网络科技有限公司，版权所有</small></p>
 	</div>
