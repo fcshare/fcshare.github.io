@@ -2,7 +2,7 @@ title: 简约不简单，晓晓记事本
 description: 图文混排，恢复现场，首页导航，跨文本搜索……多种实用功能
 google_analytics: UA-47797025-3
 show_downloads: true
-theme: jekyll-theme-architect
+theme: jekyll-theme-tactile
 
 gems:
   - jekyll-mentions
